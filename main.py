@@ -1,7 +1,7 @@
 import logging
 import os
 from aiogram.dispatcher import Dispatcher
-from aiogram.utils import executor
+from aiogram.utils  import executor
 from aiogram import Bot, types
 
 
@@ -16,21 +16,19 @@ WEBHOOK_HOST = f'https://{HEROKU_APP_NAME}.herokuapp.com'
 WEBHOOK_PATH = f'/webhook/{TOKEN}'
 WEBHOOK_URL = f'{WEBHOOK_HOST}{WEBHOOK_PATH}'
 
-logging.warning(WEBHOOK_HOST,WEBHOOK_PATH,WEBHOOK_URL)
-
 # webserver settings
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 
-async def on_startup(dp):
-    await bot.set_webhook(WEBHOOK_URL)
+async def on_startup(dispatcher):
+    await bot.set_webhook(WEBHOOK_URL, drop_pending_updates=True)
 
 @dp.message_handler()
 async def echo(message: types.Message):
     await message.answer(message.text)
 
-async def on_shutdown(dp):
+async def on_shutdown(dispatcher):
     await bot.delete_webhook()
 
 if __name__ == '__main__':
@@ -38,6 +36,7 @@ if __name__ == '__main__':
     executor.start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
+        skip_updates=True,
         on_startup=on_startup,
         on_shutdown=on_shutdown,
         host=WEBAPP_HOST,
