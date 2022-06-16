@@ -21,21 +21,17 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 
-async def on_startup(dispatcher):
+async def on_startup(dp):
     await bot.set_webhook(WEBHOOK_URL)
-
-
-async def on_shutdown(dispatcher):
-    await bot.delete_webhook()
-
 
 @dp.message_handler()
 async def echo(message: types.Message):
-    await bot.send_message(message.from_user.id,message.text)
+    await message.answer(message.text)
 
+async def on_shutdown(dp):
+    await bot.delete_webhook()
 
-
- if __name__ == '__main__':
+if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     executor.start_webhook(
         dispatcher=dp,
