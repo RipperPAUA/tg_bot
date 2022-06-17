@@ -26,7 +26,7 @@ WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 async def on_startup(dispatcher):
-    await bot.set_webhook(WEBHOOK_URL, )
+    await bot.set_webhook(WEBHOOK_URL)
 
 @dp.message_handler()
 async def echo(message: types.Message):
