@@ -25,14 +25,14 @@ logging.warning(f"WEBHOOK_URL: {WEBHOOK_URL}")
 WEBAPP_HOST = '0.0.0.0'
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
-async def on_startup(dp):
+async def on_startup(dispatcher: Dispatcher):
     await bot.set_webhook(WEBHOOK_URL)
 
 @dp.message_handler()
 async def echo(message: types.Message):
     await message.answer(message.text)
 
-async def on_shutdown(dp):
+async def on_shutdown(dispatcher: Dispatcher):
     await bot.delete_webhook()
 
 if __name__ == '__main__':
