@@ -1,24 +1,32 @@
 import logging
-
+import environ,os
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
 from aiogram.dispatcher.webhook import SendMessage
 from aiogram.utils.executor import start_webhook
 
+logging.basicConfig(level=logging.INFO)
 
-API_TOKEN = 'BOT_TOKEN_HERE'
+
+env=environ.Env()
+env.read_env(".env")
+
+API_TOKEN = env("BOT_TOKEN")
+logging.warning(f"BOT_TOKEN: {API_TOKEN}")
 
 # webhook settings
-WEBHOOK_HOST = 'https://ripperpaua-tg-bot.herokuapp.com'
+WEBHOOK_HOST = env("HEROKU_APP_NAME")
 WEBHOOK_PATH = '/webhook'
-WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
+WEBHOOK_URL = f"http://{WEBHOOK_HOST}{WEBHOOK_PATH}"
+logging.warning(f"WEBHOOK_HOST: {WEBHOOK_HOST}")
+logging.warning(f"WEBHOOK_PATH: {WEBHOOK_PATH}")
+logging.warning(f"WEBHOOK_URL: {WEBHOOK_URL}")
 
 # webserver settings
-WEBAPP_HOST = 'localhost'  # or ip
-WEBAPP_PORT = 3001
+WEBAPP_HOST = "0.0.0.0"
+WEBAPP_PORT = os.getenv('PORT', default=8000)
 
-logging.basicConfig(level=logging.INFO)
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -35,6 +43,7 @@ async def echo(message: types.Message):
 
 
 async def on_startup(dp):
+    logging.warning('Starting.....')
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
