@@ -17,7 +17,7 @@ logging.warning(f"BOT_TOKEN: {API_TOKEN}")
 
 # webhook settings
 WEBHOOK_HOST = env("HEROKU_APP_NAME")
-WEBHOOK_PATH = '/webhook'
+WEBHOOK_PATH = env("WEBHOOK_PATH")
 WEBHOOK_URL = f"http://{WEBHOOK_HOST}{WEBHOOK_PATH}"
 logging.warning(f"WEBHOOK_HOST: {WEBHOOK_HOST}")
 logging.warning(f"WEBHOOK_PATH: {WEBHOOK_PATH}")
@@ -42,24 +42,20 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, message.text)
 
 
-async def on_startup(dp):
+async def on_startup():
     logging.warning('Starting.....')
+    logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
 
-async def on_shutdown(dp):
+async def on_shutdown():
     logging.warning('Shutting down..')
 
     # insert code here to run it before shutdown
 
     # Remove webhook (not acceptable in some cases)
     await bot.delete_webhook()
-
-    # Close DB connection (if used)
-    await dp.storage.close()
-    await dp.storage.wait_closed()
-
     logging.warning('Bye!')
 
 
