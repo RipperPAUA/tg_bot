@@ -12,13 +12,13 @@ logging.basicConfig(level=logging.INFO)
 env=environ.Env()
 env.read_env(".env")
 
-API_TOKEN = env("BOT_TOKEN")
-logging.warning(f"BOT_TOKEN: {API_TOKEN}")
+BOT_API_TOKEN = env("BOT_TOKEN")
+logging.warning(f"BOT_TOKEN: {BOT_API_TOKEN}")
 
 # webhook settings
 WEBHOOK_HOST = env("HEROKU_APP_NAME")
 WEBHOOK_PATH = env("WEBHOOK_PATH")
-WEBHOOK_URL = f"http://{WEBHOOK_HOST}{WEBHOOK_PATH}"
+WEBHOOK_URL = f"https://{WEBHOOK_HOST}.herokuapp.com{WEBHOOK_PATH}"
 logging.warning(f"WEBHOOK_HOST: {WEBHOOK_HOST}")
 logging.warning(f"WEBHOOK_PATH: {WEBHOOK_PATH}")
 logging.warning(f"WEBHOOK_URL: {WEBHOOK_URL}")
@@ -28,7 +28,7 @@ WEBAPP_HOST = "0.0.0.0"
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
 
-bot = Bot(token=API_TOKEN)
+bot = Bot(token=BOT_API_TOKEN)
 dp = Dispatcher(bot)
 dp.middleware.setup(LoggingMiddleware())
 
