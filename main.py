@@ -42,14 +42,14 @@ async def echo(message: types.Message):
     return SendMessage(message.chat.id, message.text)
 
 
-async def on_startup():
+async def on_startup(dp):
     logging.warning('Starting.....')
     logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
 
-async def on_shutdown():
+async def on_shutdown(dp):
     logging.warning('Shutting down..')
 
     # insert code here to run it before shutdown
