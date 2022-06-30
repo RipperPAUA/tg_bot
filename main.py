@@ -73,6 +73,8 @@ except Exception as _ex:
 
 async def on_shutdown(dp):
     logging.warning('Shutting down..')
+    await bot.delete_webhook()
+    logging.warning('Bye!')
 
     # insert code here to run it before shutdown
 try:
@@ -83,8 +85,6 @@ try:
 except:
     conn.close()
     # Remove webhook (not acceptable in some cases)
-await bot.delete_webhook()
-logging.warning('Bye!')
 
 
 if __name__ == '__main__':
