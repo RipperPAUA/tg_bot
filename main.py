@@ -1,5 +1,7 @@
 import logging
-import environ,os
+import environ
+import psycopg2
+import os
 from aiogram import Bot, types
 from aiogram.contrib.middlewares.logging import LoggingMiddleware
 from aiogram.dispatcher import Dispatcher
@@ -46,16 +48,45 @@ async def on_startup(dp):
     logging.warning('Starting.....')
     logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
-    # insert code here to run it after start
+try:
+    conn = psycopg2.connect(
+        host=env("DB_HOST"),
+        user=env("DB_USER"),
+        password=env("DB_PASSWORD"),
+        database=env("DB_NAME")
+    )
+    # the cursor for performing database operations
+    # cursor = conn.cursor()
+
+    with conn.cursor() as cursor:
+        pass
+except Exception as _ex:
+    logging.warning(_ex, "Error starting connection")
+    if conn:
+        # cursor.close()
+        conn.close()
+        logging.warning("PostgreeSQL connection closed")
+
+
+# insert code here to run it after start
 
 
 async def on_shutdown(dp):
     logging.warning('Shutting down..')
 
     # insert code here to run it before shutdown
-
+try:
+    if conn:
+        # cursor.close()
+        conn.close()
+        logging.warning("PostgreeSQL connection closed")
+except:
+    conn.close()
     # Remove webhook (not acceptable in some cases)
     await bot.delete_webhook()
+
+
+
     logging.warning('Bye!')
 
 
