@@ -83,11 +83,8 @@ try:
 except:
     conn.close()
     # Remove webhook (not acceptable in some cases)
-    await bot.delete_webhook()
-
-
-
-    logging.warning('Bye!')
+await bot.delete_webhook()
+logging.warning('Bye!')
 
 
 if __name__ == '__main__':
