@@ -59,8 +59,6 @@ try:
     # the cursor for performing database operations
     # cursor = conn.cursor()
 
-    with conn.cursor() as cursor:
-        pass
 except Exception as _ex:
     logging.warning(_ex, "Error starting connection")
 
@@ -86,7 +84,6 @@ async def on_shutdown(dp):
     logging.warning('Bye!')
 
     # Remove webhook (not acceptable in some cases)
-
 
 if __name__ == '__main__':
     start_webhook(
