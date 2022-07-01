@@ -63,28 +63,28 @@ try:
         pass
 except Exception as _ex:
     logging.warning(_ex, "Error starting connection")
-    if conn:
-        # cursor.close()
-        conn.close()
-        logging.warning("PostgreeSQL connection closed")
+
 
 
 # insert code here to run it after start
 
 
 async def on_shutdown(dp):
+
+    # insert code here to run it before shutdown
+    try:
+        if conn:
+            # cursor.close()
+            conn.close()
+            logging.warning("PostgreeSQL connection closed")
+    except:
+        conn.close()
+        logging.warning("Error closing connection database")
+
     logging.warning('Shutting down..')
     await bot.delete_webhook()
     logging.warning('Bye!')
 
-    # insert code here to run it before shutdown
-try:
-    if conn:
-        # cursor.close()
-        conn.close()
-        logging.warning("PostgreeSQL connection closed")
-except:
-    conn.close()
     # Remove webhook (not acceptable in some cases)
 
 
