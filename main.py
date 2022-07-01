@@ -49,6 +49,7 @@ async def on_startup(dp):
     logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
 try:
+    logging.warning("Starting connection")
     conn = psycopg2.connect(
         host=env("DB_HOST"),
         user=env("DB_USER"),
