@@ -1,47 +1,7 @@
-import logging
-import environ
 import psycopg2
-import os
-from aiogram import Bot, types
-from aiogram.contrib.middlewares.logging import LoggingMiddleware
-from aiogram.dispatcher import Dispatcher
-from aiogram.dispatcher.webhook import SendMessage
+import logging
 from aiogram.utils.executor import start_webhook
-
-logging.basicConfig(level=logging.INFO)
-
-
-env=environ.Env()
-env.read_env(".env")
-
-BOT_API_TOKEN = env("BOT_TOKEN")
-logging.warning(f"BOT_TOKEN: {BOT_API_TOKEN}")
-
-# webhook settings
-WEBHOOK_HOST = env("HEROKU_APP_NAME")
-WEBHOOK_PATH = env("WEBHOOK_PATH")
-WEBHOOK_URL = f"https://{WEBHOOK_HOST}.herokuapp.com{WEBHOOK_PATH}"
-logging.warning(f"WEBHOOK_HOST: {WEBHOOK_HOST}")
-logging.warning(f"WEBHOOK_PATH: {WEBHOOK_PATH}")
-logging.warning(f"WEBHOOK_URL: {WEBHOOK_URL}")
-
-# webserver settings
-WEBAPP_HOST = "0.0.0.0"
-WEBAPP_PORT = os.getenv('PORT', default=8000)
-
-
-bot = Bot(token=BOT_API_TOKEN)
-dp = Dispatcher(bot)
-dp.middleware.setup(LoggingMiddleware())
-
-
-@dp.message_handler()
-async def echo(message: types.Message):
-    # Regular request
-    # await bot.send_message(message.chat.id, message.text)
-
-    # or reply INTO webhook
-    return SendMessage(message.chat.id, message.text)
+from create_bot import dp, bot, env, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
 
 async def on_startup(dp):
@@ -63,9 +23,8 @@ except Exception as _ex:
     logging.warning(_ex, "Error starting connection")
 
 
-
-# insert code here to run it after start
-
+from handlers import other
+other.register_handlers_other(dp)
 
 async def on_shutdown(dp):
 
@@ -82,8 +41,6 @@ async def on_shutdown(dp):
     logging.warning('Shutting down..')
     await bot.delete_webhook()
     logging.warning('Bye!')
-
-    # Remove webhook (not acceptable in some cases)
 
 if __name__ == '__main__':
     start_webhook(
