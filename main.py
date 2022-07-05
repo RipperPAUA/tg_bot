@@ -3,7 +3,6 @@ import logging
 from aiogram.utils.executor import start_webhook
 from create_bot import dp, bot, env, WEBHOOK_URL, WEBHOOK_PATH, WEBAPP_HOST, WEBAPP_PORT
 
-global conn
 
 async def on_startup(dp, conn):
     logging.warning('Starting.....')
@@ -24,7 +23,9 @@ async def on_startup(dp, conn):
 
 
 from handlers import other
+
 other.register_handlers_other(dp)
+
 
 async def on_shutdown(dp, conn):
     logging.warning('Shutting down..')
