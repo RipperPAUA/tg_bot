@@ -23,10 +23,7 @@ logging.warning(f"WEBHOOK_URL: {WEBHOOK_URL}")
 WEBAPP_HOST = "0.0.0.0"
 WEBAPP_PORT = os.getenv('PORT', default=8000)
 
-
 logging.basicConfig(level=logging.INFO)
-
-
 
 bot = Bot(token=BOT_API_TOKEN)
 dp = Dispatcher(bot)
