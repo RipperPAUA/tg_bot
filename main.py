@@ -8,41 +8,40 @@ async def on_startup(dp):
     logging.warning('Starting.....')
     logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
-    try:
-        logging.warning("Starting connection")
-        conn = psycopg2.connect(
-            host=env("DB_HOST"),
-            user=env("DB_USER"),
-            password=env("DB_PASSWORD"),
-            database=env("DB_NAME")
-        )
-    # the cursor for performing database operations
-    # cursor = conn.cursor()
-
-    except Exception as _ex:
-        logging.warning(_ex, "Error starting connection")
-
-    return conn
+    # try:
+    #     logging.warning("Starting connection")
+    #     conn = psycopg2.connect(
+    #         host=env("DB_HOST"),
+    #         user=env("DB_USER"),
+    #         password=env("DB_PASSWORD"),
+    #         database=env("DB_NAME")
+    #     )
+    # # the cursor for performing database operations
+    # # cursor = conn.cursor()
+    #
+    # except Exception as _ex:
+    #     logging.warning(_ex, "Error starting connection")
+    #
+    # return conn
 
 from handlers import other
 other.register_handlers_other(dp)
 
 
 async def on_shutdown(dp,conn):
-    # insert code here to run it before shutdown
-    try:
-        if conn:
-            # cursor.close()
-            conn.close()
-            logging.warning("PostgreeSQL connection closed")
-    except:
-        conn.close()
-        logging.warning("Error closing connection database")
+    # # insert code here to run it before shutdown
+    # try:
+    #     if conn:
+    #         # cursor.close()
+    #         conn.close()
+    #         logging.warning("PostgreeSQL connection closed")
+    # except:
+    #     conn.close()
+    #     logging.warning("Error closing connection database")
 
     logging.warning('Shutting down..')
     await bot.delete_webhook()
     logging.warning('Bye!')
-    return conn
 
 
 if __name__ == '__main__':
