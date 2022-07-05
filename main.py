@@ -8,18 +8,18 @@ async def on_startup(dp, conn):
     logging.warning('Starting.....')
     logging.warning(f"{WEBHOOK_URL}")
     await bot.set_webhook(WEBHOOK_URL)
-    try:
-        conn = psycopg2.connect(
-            host=env("DB_HOST"),
-            user=env("DB_USER"),
-            password=env("DB_PASSWORD"),
-            database=env("DB_NAME")
-        )
-        logging.warning("Connecting to PostgreSQL success")
-    except:
-        logging.warning("Starting connection is falled")
-        conn.close()
-        return conn
+    # try:
+    #     conn = psycopg2.connect(
+    #         host=env("DB_HOST"),
+    #         user=env("DB_USER"),
+    #         password=env("DB_PASSWORD"),
+    #         database=env("DB_NAME")
+    #     )
+    #     logging.warning("Connecting to PostgreSQL success")
+    # except:
+    #     logging.warning("Starting connection is falled")
+    #     conn.close()
+    #     return conn
 
 
 from handlers import other
@@ -31,12 +31,12 @@ async def on_shutdown(dp, conn):
     logging.warning('Shutting down..')
     await bot.delete_webhook()
     logging.warning('Bye!')
-    try:
-        conn.close()
-        logging.warning("Connection is closed")
-    except:
-        logging.warning("Connection was closed failld")
-        conn.close()
+    # try:
+    #     conn.close()
+    #     logging.warning("Connection is closed")
+    # except:
+    #     logging.warning("Connection was closed failld")
+    #     conn.close()
 
 
 if __name__ == '__main__':
